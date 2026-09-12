@@ -1,0 +1,57 @@
+services:
+  mariadb:
+    image: mariadb:aarchtou
+    container_name: mariadb
+    build: ./requirements/mariadb
+    networks:
+      - inception_net
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - mariadb:/var/lib/mysql
+  wordpress:
+    image: wordpress:aarchtou
+    container_name: wordpress
+    build: ./requirements/wordpress
+    networks:
+      - inception_net
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - mariadb
+  nginx:
+    image: nginx:aarchtou
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - 443:443
+    networks:
+      - inception_net
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+
+networks:
+  inception_net:
+
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PATH}/mariadb
+  wordpress:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PATH}/wordpress
