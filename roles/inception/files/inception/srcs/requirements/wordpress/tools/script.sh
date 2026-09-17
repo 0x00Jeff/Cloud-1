@@ -50,6 +50,9 @@ if [ "$($WP config get DB_USER 2>/dev/null)" != "$mariadb_USER" ]; then
     $WP config set DB_HOST mariadb
 fi
 
+$WP config set WP_HOME "https://$DOMAIN_NAME" --type=constant
+$WP config set WP_HOME "https://$DOMAIN_NAME" --type=constant
+
 if ! $WP core is-installed 2>/dev/null; then
     $WP core install \
         --url="https://$DOMAIN_NAME" \

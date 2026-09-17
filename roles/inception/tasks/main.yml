@@ -1,0 +1,17 @@
+---
+- name: Install make
+  ansible.builtin.apt:
+    name: make
+    state: present
+    update_cache: true
+
+- name: Copy inception project files
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/inception"
+    dest: "{{ inception_dest_dir }}/"
+  become: false
+
+- name: Start the project with make running {{ inception_make_jobs }} threads
+  community.general.make:
+    chdir: "{{ inception_dest_dir }}/inception/"
+    jobs: "{{ inception_make_jobs }}"

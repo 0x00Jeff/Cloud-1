@@ -1,0 +1,3 @@
+---
+inception_dest_dir: "/home/{{ ansible_user }}"
+inception_make_jobs: 2
